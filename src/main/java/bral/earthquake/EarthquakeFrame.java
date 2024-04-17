@@ -22,6 +22,7 @@ import java.util.function.Function;
 public class EarthquakeFrame extends JFrame {
 
     private JList<String> jlist = new JList<>();
+    private EarthquakeService service;
 
     public EarthquakeFrame() {
 
@@ -33,17 +34,7 @@ public class EarthquakeFrame extends JFrame {
 
 
 
-        EarthquakeService service = new EarthquakeServiceFactory().getService();
-
-        /*Disposable disposable = service.oneHour()
-                // tells Rx to request the data on a background Thread
-                .subscribeOn(Schedulers.io())
-                // tells Rx to handle the response on Swing's main Thread
-                .observeOn(SwingSchedulers.edt())
-                //.observeOn(AndroidSchedulers.mainThread()) // Instead use this on Android only
-                .subscribe(
-                        (response) -> handleResponse(response),
-                        Throwable::printStackTrace);*/
+        service = new EarthquakeServiceFactory().getService();
 
         // panel for radio buttons:
         JPanel radioPanel = new JPanel();
@@ -64,7 +55,7 @@ public class EarthquakeFrame extends JFrame {
         ActionListener radioListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(oneHourButton.isSelected()) {
+                if (oneHourButton.isSelected()) {
                     Disposable disposable = service.oneHour()
                             // tells Rx to request the data on a background Thread
                             .subscribeOn(Schedulers.io())
