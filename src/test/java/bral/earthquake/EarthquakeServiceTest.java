@@ -28,6 +28,7 @@ class EarthquakeServiceTest
         gets the updated data from the website
          */
     }
+
     @Test void significantMonth()
     {
         // given
