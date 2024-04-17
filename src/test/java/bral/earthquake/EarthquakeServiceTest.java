@@ -28,5 +28,20 @@ class EarthquakeServiceTest
         gets the updated data from the website
          */
     }
+    @Test void significantMonth()
+    {
+        // given
+        EarthquakeService service = new EarthquakeServiceFactory().getService();
+
+        // when
+        FeatureCollection collection = service.significantMonth().blockingGet();
+
+        // then
+        Properties properties = collection.features[0].properties;
+        assertNotNull(properties.place);
+        // time and mag can never be 0:
+        assertNotEquals(0, properties.mag);
+        assertNotEquals(0, properties.time);
+    }
 
 }
