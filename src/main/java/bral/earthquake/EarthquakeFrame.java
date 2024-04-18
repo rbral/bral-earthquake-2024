@@ -23,6 +23,7 @@ public class EarthquakeFrame extends JFrame {
 
     private JList<String> jlist = new JList<>();
     private EarthquakeService service;
+    private FeatureCollection featureCollection;
 
     public EarthquakeFrame() {
 
@@ -90,50 +91,24 @@ public class EarthquakeFrame extends JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     int selectedIndex = jlist.getSelectedIndex();
-                    if (selectedIndex != -1) {
-                        Feature feature = ((FeatureCollection) jlist.getModel()).features[selectedIndex];
-                        double longitude = feature.geometry.coordinates[0];
-                        double latitude = feature.geometry.coordinates[1];
-
+                    Feature selectedFeature = featureCollection.features[selectedIndex];
+                    double longitude = selectedFeature.geometry.coordinates[0];
+                    double latitude = selectedFeature.geometry.coordinates[1];
                         String googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude;
-                        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                            try {
-                                Desktop.getDesktop().browse(new URI(googleMapsUrl));
-                            } catch (IOException | URISyntaxException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
+                    try {
+                        Desktop.getDesktop().browse(new URI(googleMapsUrl));
+                    } catch (IOException | URISyntaxException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
-
-                /*if (!e.getValueIsAdjusting())
-                {
-                    int selectedIndex = jlist.getSelectedIndex();
-                    if (selectedIndex != -1)
-                    {
-                        Feature feature = ( (FeatureCollection) jlist.getModel() ).features[selectedIndex];
-                        double longitude = feature.geometry.coordinates[0];
-                        double latitude = feature.geometry.coordinates[1];
-
-                        String googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude;
-                        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                            try {
-                                Desktop.getDesktop().browse(new URI(googleMapsUrl));
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            } catch (URISyntaxException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        }
-                    }
-                }*/
             }
         });
         add(jlist, BorderLayout.CENTER);
     }
 
-    private void handleResponse(FeatureCollection response) {
 
+    private void handleResponse(FeatureCollection response) {
+        featureCollection = response;
         String[] listData = new String[response.features.length];
         for (int i = 0; i < response.features.length; i++) {
             Feature feature = response.features[i];
@@ -141,6 +116,8 @@ public class EarthquakeFrame extends JFrame {
         }
         jlist.setListData(listData);
     }
+
+
 
     public static void main(String[] args) {
         new EarthquakeFrame().setVisible(true);
