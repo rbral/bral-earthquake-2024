@@ -56,18 +56,16 @@ public class EarthquakeFrame extends JFrame {
         ActionListener radioListenerOneHour = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (oneHourButton.isSelected()) {
-                    Disposable disposable = service.oneHour()
-                            // tells Rx to request the data on a background Thread
-                            .subscribeOn(Schedulers.io())
-                            // tells Rx to handle the response on Swing's main Thread
-                            .observeOn(SwingSchedulers.edt())
-                            //.observeOn(AndroidSchedulers.mainThread()) // Instead use this on Android only
-                            .subscribe(
-                                    (response) -> handleResponse(response),
-                                    Throwable::printStackTrace);
+                Disposable disposable = service.oneHour()
+                        // tells Rx to request the data on a background Thread
+                        .subscribeOn(Schedulers.io())
+                        // tells Rx to handle the response on Swing's main Thread
+                        .observeOn(SwingSchedulers.edt())
+                        //.observeOn(AndroidSchedulers.mainThread()) // Instead use this on Android only
+                        .subscribe(
+                                (response) -> handleResponse(response),
+                                Throwable::printStackTrace);
 
-                }
             }
         };
 
@@ -76,17 +74,15 @@ public class EarthquakeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if (thirtyDaysButton.isSelected()) {
-                    Disposable disposable = service.significantMonth()
-                            // tells Rx to request the data on a background Thread
-                            .subscribeOn(Schedulers.io())
-                            // tells Rx to handle the response on Swing's main Thread
-                            .observeOn(SwingSchedulers.edt())
-                            //.observeOn(AndroidSchedulers.mainThread()) // Instead use this on Android only
-                            .subscribe(
-                                    (response) -> handleResponse(response),
-                                    Throwable::printStackTrace);
-                }
+                Disposable disposable = service.significantMonth()
+                        // tells Rx to request the data on a background Thread
+                        .subscribeOn(Schedulers.io())
+                        // tells Rx to handle the response on Swing's main Thread
+                        .observeOn(SwingSchedulers.edt())
+                        //.observeOn(AndroidSchedulers.mainThread()) // Instead use this on Android only
+                        .subscribe(
+                                (response) -> handleResponse(response),
+                                Throwable::printStackTrace);
             }
         };
 
