@@ -53,7 +53,7 @@ public class EarthquakeFrame extends JFrame {
         add(radioPanel, BorderLayout.NORTH);
 
         // action listeners:
-        ActionListener radioListener = new ActionListener() {
+        ActionListener radioListenerOneHour = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (oneHourButton.isSelected()) {
@@ -67,7 +67,16 @@ public class EarthquakeFrame extends JFrame {
                                     (response) -> handleResponse(response),
                                     Throwable::printStackTrace);
 
-                } else if (thirtyDaysButton.isSelected()) {
+                }
+            }
+        };
+
+        ActionListener radioListenerThirtyDays = new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                if (thirtyDaysButton.isSelected()) {
                     Disposable disposable = service.significantMonth()
                             // tells Rx to request the data on a background Thread
                             .subscribeOn(Schedulers.io())
@@ -81,8 +90,8 @@ public class EarthquakeFrame extends JFrame {
             }
         };
 
-        oneHourButton.addActionListener(radioListener);
-        thirtyDaysButton.addActionListener(radioListener);
+        oneHourButton.addActionListener(radioListenerOneHour);
+        thirtyDaysButton.addActionListener(radioListenerThirtyDays);
 
 
         // selection listener
